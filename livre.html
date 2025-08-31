@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livre Numérique - Expérience de Lecture Immersive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4e54c8;
+            --secondary: #8f94fb;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --accent: #ff6b6b;
+            --text: #333333;
+            --card-bg: #ffffff;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-theme {
+            --primary: #6c63ff;
+            --secondary: #a5a8ff;
+            --dark: #121212;
+            --light: #1e1e1e;
+            --accent: #ff8787;
+            --text: #e0e0e0;
+            --card-bg: #2d2d2d;
+        }
+
+        .sepia-theme {
+            --primary: #8b5a2b;
+            --secondary: #d2b48c;
+            --dark: #3e2723;
+            --light: #f5e8d3;
+            --accent: #a0522d;
+            --text: #5c3d2e;
+            --card-bg: #f0e6d2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            transition: var(--transition);
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .book-cover {
+            width: 200px;
+            height: 280px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            margin: 0 auto 30px;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transform: rotate(3deg);
+            transition: var(--transition);
+        }
+
+        .book-cover:hover {
+            transform: rotate(0) scale(1.05);
+        }
+
+        .btn {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Chapters Page */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .chapter-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .chapter-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .chapter-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Reading Page */
+        .reading-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chapter-indicator {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .content-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .content {
+            font-family: 'Roboto Slab', serif;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+        }
+
+        .reading-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .nav-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+
+        .prev-btn i {
+            margin-right: 8px;
+        }
+
+        .next-btn i {
+            margin-left: 8px;
+        }
+
+        /* Customization Panel */
+        .customization-panel {
+            position: fixed;
+            bottom: -300px;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .customization-panel.open {
+            bottom: 0;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-btn.active {
+            border-color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .theme-default {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+        }
+
+        .theme-dark {
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a4a4a 100%);
+        }
+
+        .theme-sepia {
+            background: linear-gradient(135deg, #8b5a2b 0%, #d2b48c 100%);
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+
+        .value-display {
+            min-width: 40px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+            z-index: 900;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .player-info {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        .chapter-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            width: 30%;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: var(--card-bg);
+            z-index: 800;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .book-cover {
+                width: 150px;
+                height: 210px;
+            }
+            
+            .chapter-card {
+                padding: 15px;
+            }
+            
+            .chapter-number {
+                font-size: 1.5rem;
+            }
+            
+            .content-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <span>LivreNum</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="header-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="hero">
+                <div class="book-cover floating">
+                    <span>VOYAGE</span>
+                </div>
+                <h1>Voyage aux confins de l'imaginaire</h1>
+                <p>Découvrez une histoire captivante à travers 40 chapitres palpitants. Plongez dans un univers unique et laissez-vous emporter par la magie des mots.</p>
+                <button class="btn" id="startReading">
+                    <i class="fas fa-book"></i> Commencer la lecture
+                </button>
+            </div>
+        </div>
+
+        <!-- Chapters Page -->
+        <div class="page" id="chaptersPage">
+            <h2>Table des matières</h2>
+            <div class="chapters-grid" id="chaptersGrid">
+                <!-- Chapters will be generated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Reading Page -->
+        <div class="page" id="readingPage">
+            <div class="reading-header">
+                <button class="header-btn" id="backToChapters">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="chapter-indicator">Chapitre 1: Le commencement</div>
+                <button class="header-btn" id="openCustomization">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+            
+            <div class="content-container">
+                <div class="content" id="chapterContent">
+                    <p>Il était une fois, dans un monde lointain, une aventure qui allait changer le cours de l'histoire. Le soleil se levait à peine sur les collines verdoyantes du royaume d'Eldoria, projetant de longues ombres qui dansaient au gré du vent.</p>
+                    
+                    <p>Notre héros, Kael, un jeune fermier au cœur pur, ignorait encore le destin extraordinaire qui l'attendait. Ce matin-là, alors qu'il cultivait ses terres, il découvrit un artefact étrange, brillant d'une lumière bleutée.</p>
+                    
+                    <p>Intrigué, il s'approcha prudemment. L'objet semblait fait d'un métal inconnu, avec des inscriptions complexes qui semblaient presque vivantes. Au moment où ses doigts effleurèrent la surface, une décharge d'énergie le traversa, et des visions de mondes lointains et de créatures mystiques envahirent son esprit.</p>
+                    
+                    <p>À cet instant, Kael comprit que sa vie ne serait plus jamais la même. Une quête venait de commencer, une quête qui le mènerait aux confins du connu, à la rencontre de peuples oubliés et de magie ancienne.</p>
+                </div>
+            </div>
+            
+            <div class="reading-controls">
+                <button class="nav-btn prev-btn" id="prevChapter">
+                    <i class="fas fa-chevron-left"></i> Précédent
+                </button>
+                <button class="nav-btn next-btn" id="nextChapter">
+                    Suivant <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Customization Panel -->
+        <div class="customization-panel" id="customizationPanel">
+            <div class="panel-header">
+                <h3 class="panel-title">Personnalisation</h3>
+                <button class="close-panel" id="closeCustomization">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="options-grid">
+                <div class="option-group">
+                    <label class="option-label">Thème</label>
+                    <div class="theme-options">
+                        <button class="theme-btn theme-default active" data-theme="default"></button>
+                        <button class="theme-btn theme-dark" data-theme="dark"></button>
+                        <button class="theme-btn theme-sepia" data-theme="sepia"></button>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label">Taille du texte</label>
+                    <div class="slider-container">
+                        <input type="range" min="14" max="24" value="18" class="slider" id="fontSize">
+                        <span class="value-display" id="fontSizeValue">18px</span>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label">Interligne</label>
+                    <div class="slider-container">
+                        <input type="range" min="1.4" max="2.4" step="0.1" value="1.8" class="slider" id="lineHeight">
+                        <span class="value-display" id="lineHeightValue">1.8</span>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label">Police</label>
+                    <select id="fontFamily" class="slider">
+                        <option value="'Roboto Slab', serif">Roboto Slab</option>
+                        <option value="'Poppins', sans-serif">Poppins</option>
+                        <option value="'Georgia', serif">Georgia</option>
+                        <option value="'Arial', sans-serif">Arial</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Player -->
+        <div class="audio-player">
+            <div class="player-controls">
+                <button class="play-btn" id="playAudio">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+            <div class="player-info">
+                <div class="chapter-name">Chapitre 1: Le commencement</div>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+            </div>
+            <div class="player-time">2:45 / 10:30</div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <a href="#" class="nav-item active" data-page="homePage">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Accueil</span>
+            </a>
+            <a href="#" class="nav-item" data-page="chaptersPage">
+                <i class="fas fa-list nav-icon"></i>
+                <span>Chapitres</span>
+            </a>
+            <a href="#" class="nav-item" data-page="readingPage">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Lecture</span>
+            </a>
+            <a href="#" class="nav-item" id="customizeNav">
+                <i class="fas fa-paint-brush nav-icon"></i>
+                <span>Personnaliser</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const pages = document.querySelectorAll('.page');
+            const navItems = document.querySelectorAll('.nav-item');
+            const themeToggle = document.getElementById('themeToggle');
+            const startReadingBtn = document.getElementById('startReading');
+            const backToChaptersBtn = document.getElementById('backToChapters');
+            const openCustomizationBtn = document.getElementById('openCustomization');
+            const closeCustomizationBtn = document.getElementById('closeCustomization');
+            const customizationPanel = document.getElementById('customizationPanel');
+            const customizeNav = document.getElementById('customizeNav');
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            const fontSizeSlider = document.getElementById('fontSize');
+            const fontSizeValue = document.getElementById('fontSizeValue');
+            const lineHeightSlider = document.getElementById('lineHeight');
+            const lineHeightValue = document.getElementById('lineHeightValue');
+            const fontFamilySelect = document.getElementById('fontFamily');
+            const contentElement = document.getElementById('chapterContent');
+            const chaptersGrid = document.getElementById('chaptersGrid');
+            const prevChapterBtn = document.getElementById('prevChapter');
+            const nextChapterBtn = document.getElementById('nextChapter');
+            const playAudioBtn = document.getElementById('playAudio');
+            
+            // Generate chapters
+            for (let i = 1; i <= 40; i++) {
+                const chapterCard = document.createElement('div');
+                chapterCard.className = 'chapter-card';
+                chapterCard.innerHTML = `
+                    <div class="chapter-number">${i}</div>
+                    <div class="chapter-title">Chapitre ${i}</div>
+                `;
+                chapterCard.addEventListener('click', () => {
+                    showPage('readingPage');
+                    // In a real app, you would load the chapter content here
+                    document.querySelector('.chapter-indicator').textContent = `Chapitre ${i}: Titre du chapitre`;
+                });
+                chaptersGrid.appendChild(chapterCard);
+            }
+            
+            // Navigation functions
+            function showPage(pageId) {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById(pageId).classList.add('active');
+                
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-page') === pageId) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+            
+            // Event listeners for navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('data-page');
+                    showPage(pageId);
+                });
+            });
+            
+            startReadingBtn.addEventListener('click', () => {
+                showPage('chaptersPage');
+            });
+            
+            backToChaptersBtn.addEventListener('click', () => {
+                showPage('chaptersPage');
+            });
+            
+            // Customization panel
+            openCustomizationBtn.addEventListener('click', () => {
+                customizationPanel.classList.add('open');
+            });
+            
+            closeCustomizationBtn.addEventListener('click', () => {
+                customizationPanel.classList.remove('open');
+            });
+            
+            customizeNav.addEventListener('click', (e) => {
+                e.preventDefault();
+                customizationPanel.classList.add('open');
+            });
+            
+            // Theme switching
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                if (document.body.classList.contains('dark-theme')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+            
+            themeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove all theme classes
+                    document.body.classList.remove('dark-theme', 'sepia-theme');
+                    
+                    // Add selected theme
+                    const theme = button.getAttribute('data-theme');
+                    if (theme !== 'default') {
+                        document.body.classList.add(`${theme}-theme`);
+                    }
+                    
+                    // Update active button
+                    themeButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Update theme toggle icon
+                    if (theme === 'dark') {
+                        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    } else {
+                        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    }
+                });
+            });
+            
+            // Font size customization
+            fontSizeSlider.addEventListener('input', () => {
+                const size = fontSizeSlider.value;
+                fontSizeValue.textContent = `${size}px`;
+                contentElement.style.fontSize = `${size}px`;
+            });
+            
+            // Line height customization
+            lineHeightSlider.addEventListener('input', () => {
+                const height = lineHeightSlider.value;
+                lineHeightValue.textContent = height;
+                contentElement.style.lineHeight = height;
+            });
+            
+            // Font family customization
+            fontFamilySelect.addEventListener('change', () => {
+                contentElement.style.fontFamily = fontFamilySelect.value;
+            });
+            
+            // Chapter navigation
+            let currentChapter = 1;
+            
+            prevChapterBtn.addEventListener('click', () => {
+                if (currentChapter > 1) {
+                    currentChapter--;
+                    updateChapter();
+                }
+            });
+            
+            nextChapterBtn.addEventListener('click', () => {
+                if (currentChapter < 40) {
+                    currentChapter++;
+                    updateChapter();
+                }
+            });
+            
+            function updateChapter() {
+                document.querySelector('.chapter-indicator').textContent = `Chapitre ${currentChapter}: Titre du chapitre`;
+                // In a real app, you would load the actual chapter content here
+            }
+            
+            // Audio player
+            let isPlaying = false;
+            
+            playAudioBtn.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                if (isPlaying) {
+                    playAudioBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                } else {
+                    playAudioBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
