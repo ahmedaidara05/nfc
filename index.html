@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHMED SAID AIDARA | Site Professionnel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .gold-accent {
+            color: #D4AF37;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Background 3D elements */
+        .bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            background: linear-gradient(45deg, #D4AF37, #FFD700, #D4AF37);
+            filter: blur(40px);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 600px;
+            height: 600px;
+            bottom: 50%;
+            right: 50%;
+            animation-delay: -10s;
+        }
+
+        /* Header section */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #D4AF37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            margin-bottom: 1.5rem;
+            transition: all 0.5s ease;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .profession {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        /* Contact icons */
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D4AF37;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            color: #FFD700;
+        }
+
+        .icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .icon:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Book section */
+        .book-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .book-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .book-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            color: #fff;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .store-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .store-btn i {
+            color: #D4AF37;
+            font-size: 1.2rem;
+        }
+
+        /* Organization section */
+        .org-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .org-name {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+        }
+
+        /* Social media */
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D4AF37;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .social-icon:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateY(-3px) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            color: #FFD700;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #777;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(-20px, 20px) rotate(5deg);
+            }
+            50% {
+                transform: translate(10px, -10px) rotate(-5deg);
+            }
+            75% {
+                transform: translate(15px, 15px) rotate(3deg);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .profession {
+                font-size: 1.2rem;
+            }
+            
+            .contact-icons {
+                gap: 1.5rem;
+            }
+            
+            .icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .book-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .contact-icons {
+                gap: 1rem;
+            }
+            
+            .icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .book-title {
+                font-size: 1.5rem;
+            }
+            
+            .org-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background 3D elements -->
+    <div class="bg-3d">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <img src="photo1.png" alt="AHMED SAID AIDARA" class="profile-img" onerror="this.src='https://via.placeholder.com/200x200/0a0a0a/D4AF37?text=AHMED+SAID+AIDARA'">
+            <h1>AHMED SAID <span class="gold-accent">AIDARA</span></h1>
+            <p class="profession">Eleve à l'institut Al Mouyassar</p>
+            
+            <div class="contact-icons">
+                <div class="icon" onclick="callPhone()">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="icon" onclick="sendEmail()">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="icon" onclick="openWhatsApp()">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+            </div>
+        </header>
+        
+        <section class="book-section">
+            <h2 class="book-title gold-accent">LIVRE : <span>LA VOIE DU SALUT</span></h2>
+            <div class="book-buttons">
+                <a href="#" class="store-btn">
+                    <i class="fab fa-google-play"></i>
+                    Play Store
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fab fa-apple"></i>
+                    App Store
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fas fa-globe"></i>
+                    Site Web
+                </a>
+            </div>
+        </section>
+        
+        <section class="org-section">
+            <h2 class="org-name"><span class="gold-accent">ANSAR</span> ALMOUYASSAR</h2>
+            <div class="book-buttons">
+                <a href="#" class="store-btn">
+                    <i class="fab fa-google-play"></i>
+                    Play Store
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fab fa-apple"></i>
+                    App Store
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fas fa-globe"></i>
+                    Site Web
+                </a>
+            </div>
+        </section>
+        
+        <div class="social-media">
+            <a href="#" class="social-icon">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-snapchat-ghost"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 AHMED SAID AIDARA. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // Fonctions pour les interactions des icônes
+        function callPhone() {
+            window.location.href = "tel:+221756934499";
+        }
+
+        function sendEmail() {
+            window.location.href = "mailto:ahmedsaidaidara05@gmail.com";
+        }
+
+        function openWhatsApp() {
+            window.open("https://wa.me/221756934499?text=SALAM", "_blank");
+        }
+
+        // Animation supplémentaire pour les éléments
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.icon, .store-btn, .social-icon');
+            
+            elements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = this.style.transform + ' rotate(5deg)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = this.style.transform.replace(' rotate(5deg)', '');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
